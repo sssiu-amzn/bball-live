@@ -10,19 +10,12 @@ export default function Navbar() {
         <Link to="/" className="text-xl font-bold">Sports App</Link>
         <div className="space-x-4">
           <Link to="/games" className="hover:text-gray-300">Games</Link>
-          {isAuthenticated ? (
-            <>
-              <Link to="/admin" className="hover:text-gray-300">Admin</Link>
-              <button 
-                onClick={logout}
-                className="hover:text-gray-300"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <Link to="/login" className="hover:text-gray-300">Login</Link>
-          )}
+          <Link
+            to="/signup"
+            className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Sign In
+          </Link>
         </div>
       </div>
     </nav>

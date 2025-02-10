@@ -1,17 +1,27 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { useAuthenticator, Authenticator } from '@aws-amplify/ui-react';
 import Layout from './components/Layout'
 import AdminPage from './pages/AdminPage'
 import GamesPage from './pages/GamesPage'
-import LoginPage from './pages/LoginPage'
-import ProtectedRoute from './components/ProtectedRoute'
 import GameDetail from './pages/GameDetail'
+import SignUpPage from './pages/SignUpPage'
 
 function App() {
+  const ProtectedRoute = ({ children }) => {
+    const { user } = useAuthenticator((context) => [context.user]);
+    
+    if (!user) {
+      return <Navigate to="/signup" />;
+    }
+    
+    return children;
+  };
+
   return (
+    <Authenticator.Provider>
     <Router>
       <Layout>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
           <Route 
             path="/admin" 
             element={
@@ -22,10 +32,12 @@ function App() {
           />
           <Route path="/games" element={<GamesPage />} />
           <Route path="/games/:id" element={<GameDetail />} />
+          <Route path="/signup" element={<SignUpPage />} />
           <Route path="/" element={<GamesPage />} />
         </Routes>
       </Layout>
     </Router>
+    </Authenticator.Provider>
   )
 }
 
