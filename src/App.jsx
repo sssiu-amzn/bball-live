@@ -6,6 +6,12 @@ import GamesPage from './pages/GamesPage'
 import GameDetail from './pages/GameDetail'
 import SignUpPage from './pages/SignUpPage'
 
+import { Amplify } from 'aws-amplify'
+import { events } from 'aws-amplify/data'
+import config from './amplify_outputs.json'
+
+Amplify.configure(config)
+
 function App() {
   const ProtectedRoute = ({ children }) => {
     const { user } = useAuthenticator((context) => [context.user]);
