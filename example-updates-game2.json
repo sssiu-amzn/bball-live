@@ -1,0 +1,40 @@
+[{
+    "gameId": "game2",
+    "teamId": "Los Angeles Lakers",
+    "quarter": 1,
+    "minLeft": 9,
+    "secLeft": 30,
+    "score": 2
+},
+{
+    "gameId": "game2",
+    "teamId": "Chicago Bulls",
+    "quarter": 2,
+    "minLeft": 6,
+    "secLeft": 15,
+    "score": 3
+},
+{
+    "gameId": "game2",
+    "teamId": "Los Angeles Lakers",
+    "quarter": 2,
+    "minLeft": 4,
+    "secLeft": 45,
+    "score": 3
+},
+{
+    "gameId": "game2",
+    "teamId": "Chicago Bulls",
+    "quarter": 3,
+    "minLeft": 8,
+    "secLeft": 20,
+    "score": 2
+},
+{
+    "gameId": "game2",
+    "teamId": "Los Angeles Lakers",
+    "quarter": 4,
+    "minLeft": 1,
+    "secLeft": 15,
+    "score": 2
+}]

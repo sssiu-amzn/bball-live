@@ -3,7 +3,7 @@ import { useAuthenticator, Authenticator } from '@aws-amplify/ui-react';
 import Layout from './components/Layout'
 import AdminPage from './pages/AdminPage'
 import GamesPage from './pages/GamesPage'
-import GameDetail from './pages/GameDetail'
+import GameDetailPage from './pages/GameDetailPage'
 import SignUpPage from './pages/SignUpPage'
 
 import { Amplify } from 'aws-amplify'
@@ -37,7 +37,7 @@ function App() {
             } 
           />
           <Route path="/games" element={<GamesPage />} />
-          <Route path="/games/:id" element={<GameDetail />} />
+          <Route path="/games/:id" element={<GameDetailPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/" element={<GamesPage />} />
         </Routes>

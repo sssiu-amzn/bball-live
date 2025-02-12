@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { events, EventsOptions } from 'aws-amplify/data'
+import { events, EventsOptions } from 'aws-amplify/data';
 import { fetchAuthSession } from 'aws-amplify/auth';
-
-interface GameUpdate {
-  gameId: string;
-  teamId: string;
-  quarter: number;
-  minLeft: number;
-  secLeft: number;
-  score: number;
-}
+import { games, GameUpdate } from '../games'
 
 const AdminPage: React.FC = () => {
   const [jsonInput, setJsonInput] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [authToken, setAuthToken] = useState<string | undefined>();
+  const [selectedGameId, setSelectedGameId] = useState<string>(games[0].id);
+
   const eventApiOptions: EventsOptions = {
     authMode: "userPool",
     authToken: authToken
@@ -72,16 +66,15 @@ const AdminPage: React.FC = () => {
         throw new Error('Invalid game update format');
       }
 
-      events.post('/default/game1', JSON.parse(jsonInput), eventApiOptions)
+      events.post(`/default/${selectedGameId}`, JSON.parse(jsonInput), eventApiOptions)
         .then((data) => {
           console.log('Data received:', data);
-
           setMessage('Game updates successfully posted!');
           setJsonInput(''); // Clear the input after successful submission
         })
         .catch((error) => {
           setError(error instanceof Error ? error.message : 'Failed to post game updates');
-        })
+        });
     } catch (err) {
       console.error('Error:', err);
       setError(err instanceof Error ? err.message : 'Failed to post game updates');
@@ -103,6 +96,23 @@ const AdminPage: React.FC = () => {
 
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-4">Post Game Updates</h2>
+
+        <div className="mb-4">
+          <label className="block mb-2">
+            Select Game:
+            <select
+              value={selectedGameId}
+              onChange={(e) => setSelectedGameId(e.target.value)}
+              className="w-full p-2 border rounded mt-1"
+            >
+              {games.map(game => (
+                <option key={game.id} value={game.id}>
+                  {game.id} - {game.homeName} vs {game.awayName}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
