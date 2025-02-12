@@ -6,5 +6,12 @@
       "defaultAuthMode": "apiKey",
       "apiKey": "da2-iyrudoqqzjg5reehbostfjwse4"
     }
+  },
+  "Auth": {
+    "Cognito": {
+      "userPoolId": "us-west-2_2KxOYiQHb",
+      "userPoolClientId": "3qc9d55t7i3btfsagdhjprhq90",
+      "region": "us-west-2"
+    }
   }
 }

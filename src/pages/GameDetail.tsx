@@ -1,7 +1,8 @@
 // src/pages/GameDetail.tsx
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { events } from 'aws-amplify/data'
+import { events, EventsOptions } from 'aws-amplify/data'
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 interface GameDetail {
   id: string;
@@ -58,10 +59,33 @@ export default function GameDetail() {
   const [game, setGame] = useState<GameDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [updates, setUpdates] = useState<GameUpdate[]>([]);
+  const [authToken, setAuthToken] = useState<string | undefined>();
+  const eventApiOptions: EventsOptions = {
+    authMode: "userPool",
+    authToken: authToken
+  };
+
 
   useEffect(() => {
-    const pr = events.connect(`/default/*`)
+    const getAuthToken = async () => {
+      try {
+        const session = await fetchAuthSession();
+        const token = session.tokens?.accessToken?.toString();
+        setAuthToken(token);
+      } catch (error) {
+        console.error('Error getting auth session:', error);
+      }
+    };
 
+    getAuthToken();
+  }, []);
+
+  useEffect(() => {
+    if (!authToken) {
+      return
+    }
+
+    const pr = events.connect(`/default/*`, eventApiOptions)
     pr.then((channel) => {
       channel.subscribe({
         next: (data) => {
@@ -82,7 +106,8 @@ export default function GameDetail() {
                 // If minutes are equal, compare seconds (ascending - lower seconds first)
                 return b.secLeft - a.secLeft;
               })
-              return newUpdates});
+              return newUpdates
+            });
 
             // Update the game score
             setGame((prevGame) => {
@@ -127,7 +152,7 @@ export default function GameDetail() {
     return () => {
       pr?.then((channel) => channel?.close())
     }
-  }, [id]);
+  }, [authToken]);
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -151,7 +176,7 @@ export default function GameDetail() {
 
       {/* Scoreboard */}
       <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-        <div className="grid grid-cols-3 gap-4 items-center">
+        <div className="grid grid-cols-2 gap-4 items-center">
           {/* Home Team */}
           <div className="text-center">
             <img src={game.homeLogo} alt={game.homeName} className="w-24 h-24 mx-auto mb-2" />
