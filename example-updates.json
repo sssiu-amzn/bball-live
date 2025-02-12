@@ -1,0 +1,42 @@
+[
+  {
+    "gameId": "game1",
+    "teamId": "Denver Nuggets",
+    "quarter": 1,
+    "minLeft": 11,
+    "secLeft": 45,
+    "score": 3
+  },
+  {
+    "gameId": "game1",
+    "teamId": "Boston Celtics",
+    "quarter": 1,
+    "minLeft": 10,
+    "secLeft": 30,
+    "score": 2
+  },
+  {
+    "gameId": "game1",
+    "teamId": "Denver Nuggets",
+    "quarter": 2,
+    "minLeft": 8,
+    "secLeft": 15,
+    "score": 2
+  },
+  {
+    "gameId": "game1",
+    "teamId": "Boston Celtics",
+    "quarter": 3,
+    "minLeft": 5,
+    "secLeft": 20,
+    "score": 3
+  },
+  {
+    "gameId": "game1",
+    "teamId": "Denver Nuggets",
+    "quarter": 4,
+    "minLeft": 2,
+    "secLeft": 0,
+    "score": 1
+  }
+]
