@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { events, EventsOptions } from 'aws-amplify/data'
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 interface GameUpdate {
   gameId: string;
@@ -13,6 +15,25 @@ const AdminPage: React.FC = () => {
   const [jsonInput, setJsonInput] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [authToken, setAuthToken] = useState<string | undefined>();
+  const eventApiOptions: EventsOptions = {
+    authMode: "userPool",
+    authToken: authToken
+  };
+
+  useEffect(() => {
+    const getAuthToken = async () => {
+      try {
+        const session = await fetchAuthSession();
+        const token = session.tokens?.accessToken?.toString();
+        setAuthToken(token);
+      } catch (error) {
+        console.error('Error getting auth session:', error);
+      }
+    };
+
+    getAuthToken();
+  }, [authToken]);
 
   const validateGameUpdates = (updates: GameUpdate[]): boolean => {
     return updates.every(update => {
@@ -42,7 +63,7 @@ const AdminPage: React.FC = () => {
     try {
       // Parse and validate JSON
       const gameUpdates: GameUpdate[] = JSON.parse(jsonInput);
-      
+
       if (!Array.isArray(gameUpdates)) {
         throw new Error('Input must be an array of game updates');
       }
@@ -51,14 +72,16 @@ const AdminPage: React.FC = () => {
         throw new Error('Invalid game update format');
       }
 
-/*       // Send to backend
-      await API.post('api', '/games/updates', {
-        body: gameUpdates
-      }); */
+      events.post('/default/game1', JSON.parse(jsonInput), eventApiOptions)
+        .then((data) => {
+          console.log('Data received:', data);
 
-      setMessage('Game updates successfully posted!');
-      setJsonInput(''); // Clear the input after successful submission
-
+          setMessage('Game updates successfully posted!');
+          setJsonInput(''); // Clear the input after successful submission
+        })
+        .catch((error) => {
+          setError(error instanceof Error ? error.message : 'Failed to post game updates');
+        })
     } catch (err) {
       console.error('Error:', err);
       setError(err instanceof Error ? err.message : 'Failed to post game updates');
@@ -77,10 +100,10 @@ const AdminPage: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
-      
+
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-4">Post Game Updates</h2>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block mb-2">
@@ -102,7 +125,7 @@ const AdminPage: React.FC = () => {
             >
               Format JSON
             </button>
-            
+
             <button
               type="submit"
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -117,7 +140,7 @@ const AdminPage: React.FC = () => {
             {message}
           </div>
         )}
-        
+
         {error && (
           <div className="mt-4 p-3 bg-red-100 text-red-700 rounded">
             {error}

@@ -81,11 +81,7 @@ export default function GameDetail() {
   }, []);
 
   useEffect(() => {
-    if (!authToken) {
-      return
-    }
-
-    const pr = events.connect(`/default/*`, eventApiOptions)
+    const pr = events.connect(`/default/*`)
     pr.then((channel) => {
       channel.subscribe({
         next: (data) => {
