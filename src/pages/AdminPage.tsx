@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { events, EventsOptions } from 'aws-amplify/data';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { games, GameUpdate } from '../games'
+import { games } from '../games'
+import GameUpdate from '../interfaces/GameUpdate';
 
 const AdminPage: React.FC = () => {
   const [jsonInput, setJsonInput] = useState<string>('');
@@ -66,7 +67,7 @@ const AdminPage: React.FC = () => {
         throw new Error('Invalid game update format');
       }
 
-      events.post(`/default/${selectedGameId}`, JSON.parse(jsonInput), eventApiOptions)
+      events.post(`/gameUpdate/${selectedGameId}`, JSON.parse(jsonInput), eventApiOptions)
         .then((data) => {
           console.log('Data received:', data);
           setMessage('Game updates successfully posted!');

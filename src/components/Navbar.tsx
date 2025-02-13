@@ -3,32 +3,15 @@ import { getCurrentUser } from 'aws-amplify/auth';
 import { useEffect, useState } from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import React from 'react';
+import { getCurrentUserAsync } from '../util';
 
 export default function Navbar() {
   const [username, setUsername] = useState<string>('');
   const { user, signOut } = useAuthenticator((context) => [context.user]);
 
   useEffect(() => {
-    getCurrentUserAsync();
+    getCurrentUserAsync(setUsername);
   }, [user]);
-
-  const getCurrentUserAsync = async () => {
-    try {
-      const user = await getCurrentUser();
-      // Get username - you can choose what to display:
-      // Option 1: Username
-      setUsername(user.username);
-
-      // Option 2: If you want to display their email
-      // setUsername(user.attributes.email);
-
-      // Option 3: If you want to display their name (if collected during sign up)
-      // setUsername(user.attributes.name);
-
-    } catch (error) {
-      console.error('Error getting user:', error);
-    }
-  };
 
   return (
     <nav className="bg-primary text-white p-4">

@@ -1,25 +1,5 @@
-export interface GameDetail {
-    id: string;
-    homeId: string;
-    homeName: string;
-    homeScore: number;
-    homeLogo: string;
-    awayId: string;
-    awayName: string;
-    awayScore: number;
-    awayLogo: string;
-    status: 'upcoming' | 'live' | 'finished';
-  }
-  
-export interface GameUpdate {
-    gameId: string;
-    teamId: string;
-    quarter: 1 | 2 | 3 | 4;
-    minLeft: number;
-    secLeft: number;
-    score: 1 | 2 | 3;
-  }
-  
+import GameDetail from "./interfaces/GameDetail";
+
 export const games: GameDetail[] = [
     {
       id: 'game1',
